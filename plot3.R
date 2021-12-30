@@ -18,15 +18,23 @@ allElectricUsage <- allElectricUsage [2:nrow,]
 
 
 # create date variable and date time variable and keep only 2 day recode
- s2 <- allElectricUsage %>%  mutate(dateR= dmy(Date ) , 
-                           datetimeR = as.POSIXct(paste(Date, Time), format="%d/%m/%Y %H:%M:%S")) %>% 
+s2 <- allElectricUsage %>%  mutate(dateR= dmy(Date ) , 
+                                   datetimeR = as.POSIXct(paste(Date, Time), format="%d/%m/%Y %H:%M:%S")) %>% 
   filter("2007-02-01" ==  dateR  | "2007-02-02" ==  dateR)
 
 # convert  Global_active_power to numeric
 s2 <- s2 %>%  mutate(Global_active_power_n = as.numeric(Global_active_power))
 
-# generate plot1
- s2 %>%  ggplot(aes(Global_active_power_n)) + geom_histogram(fill='red',bins = 30) + 
-  labs(x= "Global Active Power (Killowats)", y= "Frequency", title= "Global Active Power")
 
-ggsave("plot1.png",  width = 480, height = 480, units = c("px"), dpi= "screen") 
+#generate plot 3
+
+toPlot <- s2 %>% select(starts_with('Sub_metering'), datetimeR) %>% 
+  pivot_longer(cols = c('Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3'))
+
+
+toPlot %>%  ggplot(aes(x= datetimeR,y=as.numeric(value), color= name)) + geom_line()+
+  labs(x= "Datetime", y= "Energy Sub Metering" ) +
+  theme(legend.title = element_blank(), legend.position = c(.9,.9) )
+
+
+ggsave("plot3.png",  width = 480, height = 480, units = c("px"), dpi= "screen") 

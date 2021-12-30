@@ -18,15 +18,15 @@ allElectricUsage <- allElectricUsage [2:nrow,]
 
 
 # create date variable and date time variable and keep only 2 day recode
- s2 <- allElectricUsage %>%  mutate(dateR= dmy(Date ) , 
-                           datetimeR = as.POSIXct(paste(Date, Time), format="%d/%m/%Y %H:%M:%S")) %>% 
+s2 <- allElectricUsage %>%  mutate(dateR= dmy(Date ) , 
+                                   datetimeR = as.POSIXct(paste(Date, Time), format="%d/%m/%Y %H:%M:%S")) %>% 
   filter("2007-02-01" ==  dateR  | "2007-02-02" ==  dateR)
 
 # convert  Global_active_power to numeric
 s2 <- s2 %>%  mutate(Global_active_power_n = as.numeric(Global_active_power))
 
-# generate plot1
- s2 %>%  ggplot(aes(Global_active_power_n)) + geom_histogram(fill='red',bins = 30) + 
-  labs(x= "Global Active Power (Killowats)", y= "Frequency", title= "Global Active Power")
+# generate plot2   
+s2 %>%  ggplot(aes(x= datetimeR, y= Global_active_power_n)) + geom_line() + 
+  labs(y= "Global Active Power (Killowats)", x= "Datetime")
 
-ggsave("plot1.png",  width = 480, height = 480, units = c("px"), dpi= "screen") 
+ggsave("plot2.png",  width = 480, height = 480, units = c("px"), dpi= "screen") 
