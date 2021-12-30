@@ -53,22 +53,40 @@ p3 <- toPlot2 %>%  ggplot(aes(x= datetimeR, y= volt_n)) + geom_line() +
 p4 <- s2 %>%  ggplot(aes(x= datetimeR, y= as.numeric(Global_reactive_power))) + geom_line() + 
   labs( x= "Datetime", y= "Global_reactive_power")
 
-par(mfrow= c(2,2))
-with(s2,{
-   ggplot(s2, aes(x= datetimeR, y= Global_active_power_n)) + geom_line() + 
-    labs(y= "Global Active Power (Killowats)", x= "Datetime")
-   ggplot(toPlot1, aes(x= datetimeR,y=as.numeric(value), color= name)) + geom_line()+
-    labs(x= "Datetime", y= "Energy Sub Metering" ) +
-    theme(legend.title = element_blank(), legend.position = c(.9,.9) )
-   ggplot(toPlot2, aes(x= datetimeR, y= volt_n)) + geom_line() + 
-     labs(y= "Voltage", x= "Datetime") +
-     scale_y_continuous(limits=c(230,250), breaks=c(230, 240,250,300))
-   ggplot(s2, aes(x= datetimeR, y= as.numeric(Global_reactive_power))) + geom_line() + 
-     labs( x= "Datetime", y= "Global_reactive_power")
-   
-   
-  })
+# par(mfrow= c(2,2))
+# with(s2,{
+#    ggplot(s2, aes(x= datetimeR, y= Global_active_power_n)) + geom_line() + 
+#     labs(y= "Global Active Power (Killowats)", x= "Datetime")
+#    ggplot(toPlot1, aes(x= datetimeR,y=as.numeric(value), color= name)) + geom_line()+
+#     labs(x= "Datetime", y= "Energy Sub Metering" ) +
+#     theme(legend.title = element_blank(), legend.position = c(.9,.9) )
+#    ggplot(toPlot2, aes(x= datetimeR, y= volt_n)) + geom_line() + 
+#      labs(y= "Voltage", x= "Datetime") +
+#      scale_y_continuous(limits=c(230,250), breaks=c(230, 240,250,300))
+#    ggplot(s2, aes(x= datetimeR, y= as.numeric(Global_reactive_power))) + geom_line() + 
+#      labs( x= "Datetime", y= "Global_reactive_power")
+#    
+#    
+#   })
+
+png("plot4.png", width=480, height=480)
+par(mfrow = c(2, 2)) 
+ggplot(s2, aes(x= datetimeR, y= Global_active_power_n)) + geom_line() + 
+  labs(y= "Global Active Power (Killowats)", x= "Datetime")
+ggplot(toPlot1, aes(x= datetimeR,y=as.numeric(value), color= name)) + geom_line()+
+  labs(x= "Datetime", y= "Energy Sub Metering" ) +
+  theme(legend.title = element_blank(), legend.position = c(.9,.9) )
+ggplot(toPlot2, aes(x= datetimeR, y= volt_n)) + geom_line() + 
+  labs(y= "Voltage", x= "Datetime") +
+  scale_y_continuous(limits=c(230,250), breaks=c(230, 240,250,300))
+ggplot(s2, aes(x= datetimeR, y= as.numeric(Global_reactive_power))) + geom_line() + 
+  labs( x= "Datetime", y= "Global_reactive_power")
 
 
-ggsave("plot4.png",  width = 480, height = 480, units = c("px"), dpi= "screen") 
- 
+dev.off()
+
+png("plot4.png", width=480, height=480)
+
+grid.arrange(p1, p2,p3,p4, ncol=2, nrow=2)
+
+dev.off()
